@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "installing java jdk21.."
 sudo apt update
-sudo apt install fontconfig openjdk-21-jre
+sudo apt install fontconfig openjdk-21-jdk
 java -version
 
 echo "remember to set JAVA_HOME is ~/.bashrc file"
