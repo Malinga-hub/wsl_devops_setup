@@ -9,7 +9,7 @@ sudo apt update && sudo apt upgrade -y
 sudo snap install microk8s --classic
 
 echo "adding alias kubectl=microk8s kubectl  to ~/.basrhrc ..."
-echo "alias kubectl=microk8s kubectl" >> ~/.bashrc
+echo "alias kubectl='microk8s kubectl'" >> ~/.bashrc
 # shellcheck disable=SC1090
 source ~/.bashrc
 
