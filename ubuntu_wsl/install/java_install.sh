@@ -6,7 +6,7 @@ java -version
 
 echo "setting java home.."
 echo "export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64" >> ~/.bashrc
-echo "export PATH=$JAVA_HOME/bin:$PATH" >> ~/.bashrc
+#echo "export PATH=$JAVA_HOME/bin:$PATH" >> ~/.bashrc
 # shellcheck disable=SC1090
 source ~/.bashrc
 
