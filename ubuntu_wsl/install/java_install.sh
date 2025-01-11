@@ -10,5 +10,4 @@ echo "export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64" >> ~/.bashrc
 # shellcheck disable=SC1090
 source ~/.bashrc
 
-echo "JAVA_HOME env..."
-echo "$JAVA_HOME"
+echo "please restart your server for changes to take effect"
