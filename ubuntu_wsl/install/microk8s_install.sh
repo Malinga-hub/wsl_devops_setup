@@ -8,10 +8,6 @@ echo "installing microk8s..."
 sudo apt update && sudo apt upgrade -y
 sudo snap install microk8s --classic
 
-echo "adding microk8s user and group..."
-sudo usermod -aG microk8s "$USER"
-newgrp microk8s
-
 echo "adding alias kubectl=microk8s kubectl  to ~/.basrhrc ..."
 echo "alias kubectl=microk8s kubectl" >> ~/.bashrc
 # shellcheck disable=SC1090
@@ -22,5 +18,9 @@ echo -e '{\n "insecure-registries": ["localhost:32000"] \n}' > /etc/docker/daemo
 
 echo "restarting docker..."
 service docker restart
+
+echo "adding microk8s user and group..."
+sudo usermod -aG microk8s "$USER"
+newgrp microk8s
 
 echo "installation complete"
