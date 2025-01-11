@@ -4,6 +4,11 @@ sudo apt update
 sudo apt install fontconfig openjdk-21-jdk
 java -version
 
-echo "remember to set JAVA_HOME is ~/.bashrc file"
-#export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-#export PATH=$JAVA_HOME/bin:$PATH
+echo "setting java home.."
+echo "export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64" >> ~/.bashrc
+echo "export PATH=$JAVA_HOME/bin:$PATH" >> ~/.bashrc
+# shellcheck disable=SC1090
+source ~/.bashrc
+
+echo "JAVA_HOME env..."
+echo "$JAVA_HOME"
