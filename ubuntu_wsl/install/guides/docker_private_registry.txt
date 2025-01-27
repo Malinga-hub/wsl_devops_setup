@@ -1,0 +1,36 @@
+docker push to rpivate repo
+-----------------------------
+vi /etc/docker/daemon.json
+{
+  "insecure-registries": ["localhost:32000"]
+}
+
+curl http://localhost:32000/v2/_catalog - test registry
+
+create registry service - docker-registry.service
+[Unit]
+Description=Docker Registry Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run -p 32000:5000 --name registry -v /data/backups/docker-registry:/var/lib/registry registry:2
+ExecStop=/usr/bin/docker stop registry
+ExecStopPost=/usr/bin/docker rm registry
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl daemon-relaod
+systemctl start docker-registry
+
+curl http://localhost:32000/v2/_catalog - re-test registry expected output:
+{"repositories":[""]}
+
+
+
+
+
+
+
