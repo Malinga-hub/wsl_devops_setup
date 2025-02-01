@@ -6,3 +6,6 @@ kubectl edit service kubernetes-dashboard -n kube-system -  replace with actual 
 * create token
 kubectl -n kube-system create token default - (default is system user)
 
+alternative
+-----------
+microk8s kubectl describe secret -n kube-system microk8s-dashboard-token

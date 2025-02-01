@@ -8,6 +8,7 @@ vi /etc/docker/daemon.json
 curl http://localhost:32000/v2/_catalog - test registry
 
 create registry service - docker-registry.service
+---------------------------------------------------
 [Unit]
 Description=Docker Registry Service
 After=docker.service
