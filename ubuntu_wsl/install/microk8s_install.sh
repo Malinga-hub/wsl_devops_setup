@@ -50,7 +50,11 @@ echo "testing docker registry"
 sudo sleep 10
 curl http://localhost:32000/v2/_catalog
 
+echo "enabling microk8s addons"
+sudo microk8s enable registry dashboard
+
 echo "adding microk8s user and group..."
 sudo usermod -aG microk8s "$USER"
 
 echo "installation complete"
+echo "reboot required"
