@@ -50,6 +50,5 @@ curl http://localhost:32000/v2/_catalog
 
 echo "adding microk8s user and group..."
 sudo usermod -aG microk8s "$USER"
-newgrp microk8s
 
 echo "installation complete"

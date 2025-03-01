@@ -13,16 +13,14 @@ sudo systemctl start jenkins
 if ! command docker --version &> /dev/null
 then
 sudo usermod -aG docker jenkins
-newgrp docker
 systemctl restart docker
 fi
 
 if ! command microk8s status --version &> /dev/null
 then
-sudo usermod -aG m microk8s jenkins
-newgrp microk8s
 chown jenkins ~/.kube #change ownership to jenkins user for access during CI/CD to microk8s
 systemctl restart jenkins
+sudo usermod -aG m microk8s jenkins
 fi
 
 
