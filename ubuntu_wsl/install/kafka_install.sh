@@ -37,8 +37,10 @@ After=network.target
 User=root
 Group=root
 Restart=always
-ExecStart=$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/kraft/server.properties
+ExecStartPre=$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+ExecStart=$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
 ExecStop=$KAFKA_HOME/bin/kafka-server-stop.sh
+ExecStop=$KAFKA_HOME/bin/zookeeper-server-stop.sh
 StandardOutput=append:/var/log/kafka.log
 StandardError=append:/var/log/kafka.log
 
