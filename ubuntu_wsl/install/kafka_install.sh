@@ -39,6 +39,7 @@ sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-stop-script.sh > /dev/null << EOF
 nohup $KAFKA_HOME/bin/kafka-server-stop.sh &
 sleep 10
 nohup $KAFKA_HOME/bin/zookeeper-server-stop.sh &
+sleep 10
 EOF
 
 chmod +x /opt/kafka/kafka_2.13-3.9.0/*.sh
