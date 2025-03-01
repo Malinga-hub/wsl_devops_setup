@@ -47,6 +47,7 @@ echo "Enabling docker-registry service..." #always starts automatically when ser
 sudo systemctl enable docker-registry.service
 sudo systemctl restart docker
 echo "testing docker registry"
+sudo sleep 10
 curl http://localhost:32000/v2/_catalog
 
 echo "adding microk8s user and group..."
