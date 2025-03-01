@@ -30,7 +30,7 @@ echo "Configuring Kafka to run as a service..."
 # Write the service file using a here-document with sudo tee.
 sudo tee /etc/systemd/system/kafka.service > /dev/null << EOF
 [Unit]
-Description=Apache Kafka KRaft Server
+Description=Apache Kafka Zookeeper Server
 After=network.target
 
 [Service]
@@ -38,6 +38,7 @@ User=root
 Group=root
 Restart=always
 ExecStartPre=$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+ExecStartPre=/bin/sleep 10
 ExecStart=$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
 ExecStop=$KAFKA_HOME/bin/kafka-server-stop.sh
 ExecStop=$KAFKA_HOME/bin/zookeeper-server-stop.sh
