@@ -29,10 +29,12 @@ User=root
 Group=root
 
 Restart=always
-ExecStartPre=/opt/kafka/kafka_2.13-3.9.0/bin/zookeeper-server-start.sh config/zookeeper.properties > /var/log/zookeeper.log 2>&1 &
+ExecStartPre=/opt/kafka/kafka_2.13-3.9.0/bin/zookeeper-server-start.sh /opt/kafka/kafka_2.13-3.9.0/config/zookeeper.properties
 ExecStartPre=/bin/sleep 10
-ExecStart=/opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-start.sh config/server.properties > /var/log/kafka-server.log 2>&1 &
+ExecStart=/opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-start.sh /opt/kafka/kafka_2.13-3.9.0/config/server.properties
 ExecStopPost=rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
+StandardOutput=append:/var/log/kafka.log
+StandardError=append:/var/log/kafka.log
 
 [Install]
 WantedBy=multi-user.target
