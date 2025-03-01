@@ -41,9 +41,11 @@ WantedBy=multi-user.target
 EOF
 
 # Reload systemd, enable and start the Kafka service.
-echo "reloading services.."
+echo "reloading daemon services.."
 sudo systemctl daemon-reload
-sudo systemctl enable kafka
+echo "starting kafka service.."
 sudo systemctl start kafka
+echo "enabling kafka service.."
+sudo systemctl enable kafka
 
 echo "Kafka service started on port 9092 - run 'systemctl status kafka' to confirm service running."
