@@ -14,7 +14,7 @@ echo "Extracting archive..."
 tar -xzf "$archiveName"
 
 # Correct Kafka home directory
-export KAFKA_HOME="/opt/kafka/kafka_2.13-3.9.0/"
+export KAFKA_HOME="/opt/kafka/kafka_2.13-3.9.0"
 
 # Update user profile
 echo 'export KAFKA_HOME="/opt/kafka/kafka_2.13-3.9.0/"' >> ~/.bashrc
