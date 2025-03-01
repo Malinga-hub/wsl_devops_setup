@@ -29,9 +29,11 @@ User=root
 Group=root
 
 Restart=always
-ExecStartPre=/opt/kafka/kafka_2.13-3.9.0/bin/zookeeper-server-start.sh /opt/kafka/kafka_2.13-3.9.0/config/zookeeper.properties > /var/log/zookeeper.log 2>&1 &
+ExecStartPre=nohup /opt/kafka/kafka_2.13-3.9.0/bin/zookeeper-server-start.sh /opt/kafka/kafka_2.13-3.9.0/config/zookeeper.properties > /var/log/zookeeper.log 2>&1 &
 ExecStartPre=/bin/sleep 10
-ExecStart=/opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-start.sh /opt/kafka/kafka_2.13-3.9.0/config/server.properties > /var/log/kafka-server.log 2>&1 &
+ExecStart=nohup /opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-start.sh /opt/kafka/kafka_2.13-3.9.0/config/server.properties > /var/log/kafka-server.log 2>&1 &
+ExecStopPost=nohup /opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-stop.sh > /var/log/kafka-server.log 2>&1 &
+ExecStopPost=nohup /opt/kafka/kafka_2.13-3.9.0/bin/zookeeper-server-stop.sh > /var/log/zookeeper.log 2>&1 &
 ExecStopPost=rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
 
 [Install]
@@ -42,8 +44,8 @@ EOF
 echo "reloading daemon services.."
 sudo systemctl daemon-reload
 echo "starting kafka service.."
-sudo systemctl start kafka
+sudo systemctl start kafka.service
 echo "enabling kafka service.."
-sudo systemctl enable kafka
+sudo systemctl enable kafka.service
 
 echo "Kafka service started on port 9092 - run 'systemctl status kafka' to confirm service running."
