@@ -32,6 +32,8 @@ Group=root
 # Generate a random cluster ID, format storage, then start Kafka
 ExecStartPre=/opt/kafka/kafka_2.13-3.9.0/bin/zookeeper-server-start.sh config/zookeeper.properties
 ExecStart=/opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-start.sh config/server.properties
+StandardOutput=append:/var/log/kafka.log
+StandardError=append:/var/log/kafka.log
 Restart=on-failure
 RestartSec=10
 
