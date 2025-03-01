@@ -25,23 +25,20 @@ Description=Apache Kafka KRaft Server
 After=network.target
 
 [Service]
-Type=simple
-WorkingDirectory=/opt/kafka/kafka_2.13-3.9.0
 User=root
 Group=root
-# Generate a random cluster ID, format storage, then start Kafka
+
+Restart=always
 ExecStartPre=/opt/kafka/kafka_2.13-3.9.0/bin/zookeeper-server-start.sh config/zookeeper.properties
 ExecStart=/opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-start.sh config/server.properties
-StandardOutput=append:/var/log/kafka.log
-StandardError=append:/var/log/kafka.log
-Restart=on-failure
-RestartSec=10
+ExecStopPost=rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
 # Reload systemd, enable and start the Kafka service.
+echo "reloading services.."
 sudo systemctl daemon-reload
 sudo systemctl enable kafka
 sudo systemctl start kafka
