@@ -9,4 +9,4 @@ echo "export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64" >> ~/.bashrc
 # shellcheck disable=SC1090
 source ~/.bashrc
 
-echo "path set: $JAVA_HOME"
+echo "reboot required"

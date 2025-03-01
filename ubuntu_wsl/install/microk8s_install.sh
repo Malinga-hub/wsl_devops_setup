@@ -21,10 +21,6 @@ echo -e '{\n "insecure-registries": ["localhost:32000"] \n}' > /etc/docker/daemo
 echo "restarting docker..."
 systemctl restart docker
 
-echo "adding microk8s user and group..."
-sudo usermod -aG microk8s "$USER"
-newgrp microk8s
-
 echo "adding docker private docker registry service to be used by microk8s"
 
 sudo tee /etc/systemd/system/docker-registry.service > /dev/null << EOF
@@ -51,5 +47,9 @@ echo "Enabling docker-registry service..." #always starts automatically when ser
 sudo systemctl enable docker-registry.service
 echo "testing docker registry"
 curl http://localhost:32000/v2/_catalog
+
+echo "adding microk8s user and group..."
+sudo usermod -aG microk8s "$USER"
+newgrp microk8s
 
 echo "installation complete"
