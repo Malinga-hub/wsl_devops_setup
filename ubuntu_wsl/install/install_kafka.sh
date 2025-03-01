@@ -7,7 +7,7 @@ mkdir -p $baseFolder
 cd $baseFolder || exit
 
 echo "downloading kafka from: $kafkaUrl"
-wget $kafkaUrl
+wget -nc $kafkaUrl
 
 echo "extracting archive.."
 tar -xzf $archiveName
