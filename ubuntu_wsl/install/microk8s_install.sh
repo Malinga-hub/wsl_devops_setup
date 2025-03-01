@@ -45,6 +45,7 @@ echo "Starting docker-registry service"
 systemctl start docker-registry.service
 echo "Enabling docker-registry service..." #always starts automatically when server re-booted
 sudo systemctl enable docker-registry.service
+sudo systemctl restart docker
 echo "testing docker registry"
 curl http://localhost:32000/v2/_catalog
 
