@@ -40,6 +40,8 @@ ExecStartPre=/bin/sleep 10
 ExecStart=$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
 ExecStopPost=$KAFKA_HOME/bin/kafka-server-start.sh
 ExecStopPost=$KAFKA_HOME/bin/zookeeper-server-start.sh
+StandardOutput=append:/var/log/kafka.log
+StandardError=append:/var/log/kafka.log
 
 [Install]
 WantedBy=multi-user.target
