@@ -25,7 +25,7 @@ After=network.target
 [Service]
 Type=simple
 # Set the working directory where Kafka is installed (adjust as needed)
-WorkingDirectory="/opt/kafka/kafka_2.13-3.9.0
+WorkingDirectory="/opt/kafka/kafka_2.13-3.9.0"
 # Run as a specific user/group; ensure this user has permissions for the Kafka files and storage
 User=kafka
 Group=kafka
