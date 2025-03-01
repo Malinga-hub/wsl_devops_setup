@@ -1,0 +1,8 @@
+#change default ubuntu user session timeout
+vi ~/.bashrc
+TMOUT=3600 #one hour
+
+#set date and time
+run "date" -> output current date and time on server
+timedatectl list-timezones
+timedatectl set-timezone Africa/Lusaka (replace with your timezone from list)

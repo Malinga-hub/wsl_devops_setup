@@ -1,11 +1,3 @@
 k8s dashboard service
 ----------------------
-* edit k8s service change type to LoadBalancer
-kubectl get -all --all-namespaces -> confirm kubernetes dashboard service/pod namespace
-kubectl edit service kubernetes-dashboard -n kube-system -  replace with actual service name and namespace before running
-* create token
-kubectl -n kube-system create token default - (default is system user)
-
-alternative
------------
 microk8s kubectl describe secret -n kube-system microk8s-dashboard-token

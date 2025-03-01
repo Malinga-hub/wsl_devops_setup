@@ -10,3 +10,6 @@ sudo apt-get install jenkins
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 sudo systemctl status jenkins
+
+#sudo usermod -aG root jenkins
+#newgrp root
