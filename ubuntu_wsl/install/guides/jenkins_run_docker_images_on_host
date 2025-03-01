@@ -1,4 +1,0 @@
-run docker images through jenkins on host machine
--------------------------------------------------
-sudo usermod -aG docker jenkins
-systemctl restart jenkins

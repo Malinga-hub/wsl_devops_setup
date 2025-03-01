@@ -9,7 +9,23 @@ sudo apt-get update
 sudo apt-get install jenkins
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
-sudo systemctl status jenkins
+
+if ! command docker --version &> /dev/null
+then
+sudo usermod -aG docker jenkins
+newgrp docker
+systemctl restart docker
+fi
+
+if ! command microk8s status --version &> /dev/null
+then
+sudo usermod -aG m microk8s jenkins
+newgrp microk8s
+chown jenkins ~/.kube #change ownership to jenkins user for access during CI/CD to microk8s
+systemctl restart jenkins
+fi
+
+
 
 #sudo usermod -aG root jenkins
 #newgrp root
