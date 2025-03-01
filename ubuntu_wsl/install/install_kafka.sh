@@ -27,11 +27,11 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/opt/kafka/kafka_2.13-3.9.0
-User=kafka
-Group=kafka
+User=root
+Group=root
 # Generate a random cluster ID, format storage, then start Kafka
-ExecStartPre=/bin/sh -c "KAFKA_CLUSTER_ID=\$(/opt/kafka/kafka_2.13-3.9.0/bin/kafka-storage.sh random-uuid) && /opt/kafka/kafka_2.13-3.9.0/bin/kafka-storage.sh format --standalone -t \$KAFKA_CLUSTER_ID -c /opt/kafka/kafka_2.13-3.9.0/config/kraft/reconfig-server.properties"
-ExecStart=/opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-start.sh /opt/kafka/kafka_2.13-3.9.0/config/kraft/reconfig-server.properties
+ExecStartPre=./bin/zookeeper-server-start.sh config/zookeeper.properties
+ExecStart=./bin/kafka-server-start.sh config/server.properties
 Restart=on-failure
 RestartSec=10
 
