@@ -18,6 +18,24 @@ ls -ltra
 
 echo "Configuring Kafka to run as a service..."
 
+sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-service-start-script.sh > /dev/null << 'EOF'
+#!/bin/bash
+nohup ./bin/zookeeper-server-start.sh ./config/zookeeper.properties >> /var/log/zookeeper.log 2>&1
+sleep 10
+nohup ./bin/kafka-server-start.sh ./config/server.properties >> /var/log/kafka-server.log 2>&1
+EOF
+
+sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-service-stop-script.sh > /dev/null << 'EOF'
+#!/bin/bash
+nohup ./bin/kafka-server-stop.sh >> /var/log/zookeeper.log 2>&1
+sleep 10
+nohup ./bin/zookeeper-server-stop.sh >> /var/log/kafka-server.log 2>&1
+rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
+EOF
+
+#make executable
+sudo chmod +x /opt/kafka/kafka_2.13-3.9.0/*.sh
+
 # Write the service file using a here-document with sudo tee.
 sudo tee /etc/systemd/system/kafka.service > /dev/null << 'EOF'
 [Unit]
@@ -29,12 +47,8 @@ User=root
 Group=root
 
 Restart=always
-ExecStartPre=nohup /opt/kafka/kafka_2.13-3.9.0/bin/zookeeper-server-start.sh /opt/kafka/kafka_2.13-3.9.0/config/zookeeper.properties > /var/log/zookeeper.log 2>&1 &
-ExecStartPre=/bin/sleep 10
-ExecStart=nohup /opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-start.sh /opt/kafka/kafka_2.13-3.9.0/config/server.properties > /var/log/kafka-server.log 2>&1 &
-ExecStopPost=nohup /opt/kafka/kafka_2.13-3.9.0/bin/kafka-server-stop.sh > /var/log/kafka-server.log 2>&1 &
-ExecStopPost=nohup /opt/kafka/kafka_2.13-3.9.0/bin/zookeeper-server-stop.sh > /var/log/zookeeper.log 2>&1 &
-ExecStopPost=rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
+ExecStart=/opt/kafka/kafka_2.13-3.9.0/kafka-service-start-script.sh
+ExecStopPost=/opt/kafka/kafka_2.13-3.9.0/kafka-service-stop-script.sh
 
 [Install]
 WantedBy=multi-user.target
