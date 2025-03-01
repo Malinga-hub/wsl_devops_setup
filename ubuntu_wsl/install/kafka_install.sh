@@ -27,6 +27,22 @@ sudo chmod 666 /var/log/kafka.log
 
 echo "Configuring Kafka to run as a service..."
 
+sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-start-script.sh > /dev/null << EOF
+#!/bin/bash
+nohup $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &
+sleep 10
+nohup $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &
+EOF
+
+sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-stop-script.sh > /dev/null << EOF
+#!/bin/bash
+nohup $KAFKA_HOME/bin/kafka-server-stop.sh &
+sleep 10
+nohup $KAFKA_HOME/bin/zookeeper-server-stop.sh &
+EOF
+
+chmod +x /opt/kafka/kafka_2.13-3.9.0/*.sh
+
 # Write the service file using a here-document with sudo tee.
 sudo tee /etc/systemd/system/kafka.service > /dev/null << EOF
 [Unit]
@@ -37,11 +53,8 @@ After=network.target
 User=root
 Group=root
 Restart=always
-ExecStartPre=$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
-ExecStartPre=/bin/sleep 10
-ExecStart=$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
-ExecStop=$KAFKA_HOME/bin/kafka-server-stop.sh
-ExecStop=$KAFKA_HOME/bin/zookeeper-server-stop.sh
+ExecStart=/opt/kafka/kafka_2.13-3.9.0/kafka-start-script.sh
+ExecStop=/opt/kafka/kafka_2.13-3.9.0/kafka-stop-script.sh
 StandardOutput=append:/var/log/kafka.log
 StandardError=append:/var/log/kafka.log
 
