@@ -20,7 +20,7 @@ if ! command microk8s status --version &> /dev/null
 then
 chown jenkins ~/.kube #change ownership to jenkins user for access during CI/CD to microk8s
 systemctl restart jenkins
-sudo usermod -aG m microk8s jenkins
+sudo usermod -aG microk8s jenkins
 fi
 
 
