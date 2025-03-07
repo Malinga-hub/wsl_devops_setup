@@ -28,23 +28,10 @@ sudo chmod 666 /var/log/kafka.log
 
 echo "Configuring Kafka to run as a service..."
 
-sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-start-script.sh > /dev/null << EOF
-#!/bin/bash
+cp ./kafka_scripts/*.sh $KAFKA_HOME/
+chmod +x $KAFKA_HOME/*.sh
 
-export KAFKA_CLUSTER_ID="$($KAFKA_HOME/bin/kafka-storage.sh random-uuid)"
-echo "KAFKA_CLUSTER_ID set to $KAFKA_CLUSTER_ID"
-
-$KAFKA_HOME/bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c $KAFKA_HOME/config/kraft/reconfig-server.properties
-nohup $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/kraft/reconfig-server.properties &
-EOF
-
-sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-stop-script.sh > /dev/null << EOF
-#!/bin/bash
-nohup $KAFKA_HOME/bin/kafka-server-stop.sh &
-rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
-EOF
-
-chmod +x /opt/kafka/kafka_2.13-3.9.0/*.sh
+echo "scripts copied and executable"
 
 # Write the service file using a here-document with sudo tee.
 sudo tee /etc/systemd/system/kafka.service > /dev/null << EOF
@@ -56,8 +43,8 @@ After=network.target
 User=root
 Group=root
 Restart=always
-ExecStart=/opt/kafka/kafka_2.13-3.9.0/kafka-start-script.sh
-ExecStop=/opt/kafka/kafka_2.13-3.9.0/kafka-stop-script.sh
+ExecStart=$KAFKA_HOME/kafka-start-script.sh
+ExecStop=$KAFKA_HOME/kafka-stop-script.sh
 StandardOutput=append:/var/log/kafka.log
 StandardError=append:/var/log/kafka.log
 
