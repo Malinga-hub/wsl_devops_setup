@@ -1,4 +1,9 @@
 #!/bin/bash
+echo "ensure docker installed before proceeding..."
+if ! command docker --version &> /dev/null
+then echo "docker not installed. exiting.." exit 1
+fi
+
 archiveName="kafka_2.13-3.9.0.tgz"
 kafkaUrl="https://dlcdn.apache.org/kafka/3.9.0/$archiveName"
 baseFolder="/opt/kafka"
@@ -26,17 +31,10 @@ echo "Added KAFKA_HOME : $KAFKA_HOME to user profile"
 sudo touch /var/log/kafka.log
 sudo chmod 666 /var/log/kafka.log
 
-#echo "Configuring Kafka to run as a service..."
-#
-#cp ./kafka_scripts/*.sh $KAFKA_HOME/
-#chmod +x $KAFKA_HOME/*.sh
-#
-#echo "scripts copied and executable"
-
 # Write the service file using a here-document with sudo tee.
 sudo tee /etc/systemd/system/kafka.service > /dev/null << EOF
 [Unit]
-Description=Apache Kafka Zookeeper Server
+Description=Docker Apache Kafka Zookeeper Server
 After=network.target
 
 [Service]
