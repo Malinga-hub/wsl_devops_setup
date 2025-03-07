@@ -43,10 +43,12 @@ After=network.target
 User=root
 Group=root
 Restart=always
-ExecStartPre=/bin/bash -c "$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties"
-ExecStart=/bin/bash -c "$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties"
+ExecStartPre=/bin/bash -c "nohup $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &"
+ExecStartPre=/bin/bash -c "sleep 10"
+ExecStart=/bin/bash -c "nohup $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &"
 ExecStopPre=/bin/bash -c "$KAFKA_HOME/bin/kafka-server-stop.sh"
-ExecStop=/bin/bash -c "$KAFKA_HOME/bin/zookeeper-server-stop.sh"
+ExecStopPre=/bin/bash -c "$KAFKA_HOME/bin/zookeeper-server-stop.sh"
+ExecStopPre=/bin/bash -c "rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs"
 StandardOutput=append:/var/log/kafka.log
 StandardError=append:/var/log/kafka.log
 
