@@ -26,12 +26,12 @@ echo "Added KAFKA_HOME : $KAFKA_HOME to user profile"
 sudo touch /var/log/kafka.log
 sudo chmod 666 /var/log/kafka.log
 
-echo "Configuring Kafka to run as a service..."
-
-cp ./kafka_scripts/*.sh $KAFKA_HOME/
-chmod +x $KAFKA_HOME/*.sh
-
-echo "scripts copied and executable"
+#echo "Configuring Kafka to run as a service..."
+#
+#cp ./kafka_scripts/*.sh $KAFKA_HOME/
+#chmod +x $KAFKA_HOME/*.sh
+#
+#echo "scripts copied and executable"
 
 # Write the service file using a here-document with sudo tee.
 sudo tee /etc/systemd/system/kafka.service > /dev/null << EOF
@@ -43,8 +43,10 @@ After=network.target
 User=root
 Group=root
 Restart=always
-ExecStart=$KAFKA_HOME/kafka-start-script.sh
-ExecStop=$KAFKA_HOME/kafka-stop-script.sh
+ExecStartPre=/bin/bash -c "$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties"
+ExecStart=/bin/bash -c "$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties"
+ExecStopPre=/bin/bash -c "$KAFKA_HOME/bin/kafka-server-stop.sh"
+ExecStop=/bin/bash -c "$KAFKA_HOME/bin/zookeeper-server-stop.sh"
 StandardOutput=append:/var/log/kafka.log
 StandardError=append:/var/log/kafka.log
 
