@@ -43,8 +43,8 @@ Group=root
 Restart=always
 ExecStartPre=/bin/bash -c "docker pull apache/kafka:3.9.0"
 ExecStart=/bin/bash -c "docker run --rm --name kafka -p 9092:9092 apache/kafka:3.9.0"
-ExecStopPre=/bin/bash -c "docker stop kafka"
-ExecStopPre=/bin/bash -c "docker rm kafka"
+ExecStop=/bin/bash -c "docker stop kafka"
+ExecStopPost=/bin/bash -c "docker rm kafka"
 StandardOutput=append:/var/log/kafka.log
 StandardError=append:/var/log/kafka.log
 
