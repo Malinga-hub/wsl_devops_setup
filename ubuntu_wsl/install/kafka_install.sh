@@ -43,12 +43,10 @@ After=network.target
 User=root
 Group=root
 Restart=always
-ExecStartPre=/bin/bash -c "nohup $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &"
-ExecStartPre=/bin/bash -c "sleep 10"
-ExecStart=/bin/bash -c "nohup $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &"
-ExecStopPre=/bin/bash -c "$KAFKA_HOME/bin/kafka-server-stop.sh"
-ExecStopPre=/bin/bash -c "$KAFKA_HOME/bin/zookeeper-server-stop.sh"
-ExecStopPre=/bin/bash -c "rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs"
+ExecStartPre=/bin/bash -c "docker pull apache/kafka:3.9.0"
+ExecStart=/bin/bash -c "docker run -p 9092:9092 apache/kafka:3.9.0 --name kafka"
+ExecStopPre=/bin/bash -c "docker stop kafka"
+ExecStopPre=/bin/bash -c "docker rm kafka"
 StandardOutput=append:/var/log/kafka.log
 StandardError=append:/var/log/kafka.log
 
