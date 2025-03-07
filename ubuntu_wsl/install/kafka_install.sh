@@ -30,8 +30,8 @@ echo "Configuring Kafka to run as a service..."
 
 sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-start-script.sh > /dev/null << EOF
 #!/bin/bash
-set -e
-KAFKA_CLUSTER_ID="$($KAFKA_HOME/bin/kafka-storage.sh random-uuid)"
+
+export KAFKA_CLUSTER_ID="$($KAFKA_HOME/bin/kafka-storage.sh random-uuid)"
 echo "KAFKA_CLUSTER_ID set to $KAFKA_CLUSTER_ID"
 
 $KAFKA_HOME/bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c $KAFKA_HOME/config/kraft/reconfig-server.properties
