@@ -18,6 +18,7 @@ export KAFKA_HOME="/opt/kafka/kafka_2.13-3.9.0"
 
 # Update user profile
 echo 'export KAFKA_HOME="/opt/kafka/kafka_2.13-3.9.0/"' >> ~/.bashrc
+# shellcheck disable=SC1090
 source ~/.bashrc
 echo "Added KAFKA_HOME : $KAFKA_HOME to user profile"
 
@@ -29,17 +30,19 @@ echo "Configuring Kafka to run as a service..."
 
 sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-start-script.sh > /dev/null << EOF
 #!/bin/bash
-nohup $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &
-sleep 10
-nohup $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &
+KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
+sleep 5
+nohup bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c config/kraft/reconfig-server.properties &
+sleep 5
+bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c config/kraft/reconfig-server.properties
+sleep 5
+nohup bin/kafka-server-start.sh config/kraft/reconfig-server.properties &
 EOF
 
 sudo tee /opt/kafka/kafka_2.13-3.9.0/kafka-stop-script.sh > /dev/null << EOF
 #!/bin/bash
 nohup $KAFKA_HOME/bin/kafka-server-stop.sh &
-sleep 10
-nohup $KAFKA_HOME/bin/zookeeper-server-stop.sh &
-rm -rf /tmp/kafka-logs /tmp/zookeeper
+rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
 EOF
 
 chmod +x /opt/kafka/kafka_2.13-3.9.0/*.sh
